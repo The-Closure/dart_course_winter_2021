@@ -25,4 +25,13 @@ void main() {
     }
   }).toList(growable: true);
   print(wList);
+
+  Map<int, dynamic> myMap = Map();
+  myMap.addAll({1: '', 2: '', 3: '', 4: ''});
+
+  Map<String, dynamic> result = myMap
+      .map<String, dynamic>((key, value) => MapEntry(key.toString(), value));
+
+  myMap.removeWhere((key, value) => key <= 2);
+  myMap.update(3, (value) => value + ' modified');
 }
