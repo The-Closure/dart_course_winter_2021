@@ -1,37 +1,30 @@
-import 'package:dart_course_winter_2021/dart_course_winter_2021.dart'
-    as dart_course_winter_2021;
+import 'dart:async';
 
-void main() {
-  List<Object> myList = [1, 2, 3, 4, 'a', 'v', 'av', 'ac'];
-  print(myList.first);
-  print(myList.reversed);
-  myList.shuffle();
-  print(myList);
-  print(myList.first);
-  myList.forEach((element) {
-    print(element);
+import 'dart:math';
+
+void main() async {
+  int value = await getServerValue();
+  print(value);
+  print('after value');
+
+  Future<int> val = getServerValue();
+  val.then((v) => print(v));
+  print('after val');
+
+  Future<int> cloneValue = getCloneServerValue();
+  cloneValue.then((value) => print('clone $value'));
+}
+
+Future<int> getServerValue() {
+  return Future.delayed(Duration(seconds: 5), () {
+    int a = Random().nextInt(10);
+    return a;
   });
-  print(myList.indexOf(2));
-  List exList = myList.expand((element) => [element, element]).toList();
-  print(exList);
-  myList.forEach((element) {
-    print(element);
+}
+
+Future<int> getCloneServerValue() {
+  return Future.delayed(Duration(seconds: 2), () {
+    int a = Random().nextInt(10);
+    return a;
   });
-  List wList = myList.where((element) {
-    try {
-      return int.parse(element.toString()) < 3;
-    } catch (e) {
-      return element == 'av';
-    }
-  }).toList(growable: true);
-  print(wList);
-
-  Map<int, dynamic> myMap = Map();
-  myMap.addAll({1: '', 2: '', 3: '', 4: ''});
-
-  Map<String, dynamic> result = myMap
-      .map<String, dynamic>((key, value) => MapEntry(key.toString(), value));
-
-  myMap.removeWhere((key, value) => key <= 2);
-  myMap.update(3, (value) => value + ' modified');
 }
