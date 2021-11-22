@@ -1,30 +1,23 @@
-import 'dart:async';
+import 'dart:convert';
 
-import 'dart:math';
+import 'package:http/http.dart' as http;
+
+import 'response_value.dart';
 
 void main() async {
-  int value = await getServerValue();
-  print(value);
-  print('after value');
-
-  Future<int> val = getServerValue();
-  val.then((v) => print(v));
-  print('after val');
-
-  Future<int> cloneValue = getCloneServerValue();
-  cloneValue.then((value) => print('clone $value'));
-}
-
-Future<int> getServerValue() {
-  return Future.delayed(Duration(seconds: 5), () {
-    int a = Random().nextInt(10);
-    return a;
+  Future<String> value = getCommunity();
+  value.then((value) {
+    Data data = Data.fromJson(jsonDecode(value));
+    print(data.name);
+    data.users?.forEach((element) {
+      print(element.name);
+    });
   });
 }
 
-Future<int> getCloneServerValue() {
-  return Future.delayed(Duration(seconds: 2), () {
-    int a = Random().nextInt(10);
-    return a;
-  });
+Future<String> getCommunity() async {
+  http.Response response = await http.get(
+      Uri.parse('http://164.68.96.30:7070/v2/api/community/getbyid?id=4'),
+      headers: {'content-type': 'application/json'});
+  return response.body;
 }
